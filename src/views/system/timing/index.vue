@@ -3,28 +3,27 @@
     <eHeader :query="query"/>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-      <el-table-column :show-overflow-tooltip="true" prop="jobName" width="100px" label="任务名称"/>
-      <el-table-column :show-overflow-tooltip="true" prop="beanName" label="Bean名称"/>
-      <el-table-column :show-overflow-tooltip="true" prop="methodName" width="90px" label="执行方法"/>
-      <el-table-column :show-overflow-tooltip="true" prop="params" width="80px" label="参数"/>
-      <el-table-column :show-overflow-tooltip="true" prop="cronExpression" width="100px" label="cron表达式"/>
-      <el-table-column :show-overflow-tooltip="true" prop="isPause" width="90px" label="状态">
+      <el-table-column :show-overflow-tooltip="true" prop="jobName" width="100px" label="任务名称" align="center"/>
+      <el-table-column :show-overflow-tooltip="true" prop="beanName" label="Bean名称" align="center"/>
+      <el-table-column :show-overflow-tooltip="true" prop="methodName" width="90px" label="执行方法" align="center"/>
+      <el-table-column :show-overflow-tooltip="true" prop="params" width="80px" label="参数" align="center"/>
+      <el-table-column :show-overflow-tooltip="true" prop="cronExpression" width="100px" label="cron表达式" align="center"/>
+      <el-table-column :show-overflow-tooltip="true" prop="isPause" width="90px" label="状态" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isPause ? 'warning' : 'success'">{{ scope.row.isPause ? '已暂停' : '运行中' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述"/>
-      <el-table-column :show-overflow-tooltip="true" prop="updateTime" label="更新日期">
+      <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" align="center"/>
+      <el-table-column :show-overflow-tooltip="true" prop="updateTime" label="更新日期" align="center">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="checkPermission(['ADMIN','JOB_ALL','JOB_EDIT','JOB_DELETE'])" label="操作" width="180px" align="center">
+      <el-table-column v-if="checkPermission(['ADMIN','JOB_ALL','JOB_EDIT','JOB_DELETE'])" label="操作" width="250px" align="center">
         <template slot-scope="scope">
           <edit v-permission="['ADMIN','JOB_ALL','JOB_EDIT']" :data="scope.row" :sup_this="sup_this"/>
-          <el-button v-permission="['ADMIN','JOB_ALL','JOB_EDIT']" style="margin-left: -2px" type="text" size="mini" @click="execute(scope.row.id)">执行</el-button>
-          <el-button v-permission="['ADMIN','JOB_ALL','JOB_EDIT']" style="margin-left: 3px" type="text" size="mini" @click="updateStatus(scope.row.id,scope.row.isPause ? '恢复' : '暂停')">
-            {{ scope.row.isPause ? '恢复' : '暂停' }}
+          <el-button v-permission="['ADMIN','JOB_ALL','JOB_EDIT']" style="margin-left: -3px" type="primary" size="mini" @click="updateStatus(scope.row.id,scope.row.isPause ? '运行' : '暂停')">
+            {{ scope.row.isPause ? '运行' : '暂停' }}
           </el-button>
           <el-popover
             v-permission="['ADMIN','JOB_ALL','JOB_DELETE']"
@@ -36,7 +35,7 @@
               <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
               <el-button :loading="delLoading" type="primary" size="mini" @click="subDelete(scope.row.id)">确定</el-button>
             </div>
-            <el-button slot="reference" type="text" size="mini">删除</el-button>
+            <el-button slot="reference" type="danger" size="mini">删除</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -54,7 +53,7 @@
 <script>
 import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
-import { del, updateIsPause, execution } from '@/api/timing'
+import { del, updateIsPause } from '@/api/timing'
 import { parseTime } from '@/utils/index'
 import eHeader from './module/header'
 import edit from './module/edit'
@@ -82,17 +81,6 @@ export default {
       this.params = { page: this.page, size: this.size, sort: sort }
       if (value) { this.params['jobName'] = value }
       return true
-    },
-    execute(id) {
-      execution(id).then(res => {
-        this.$notify({
-          title: '执行成功',
-          type: 'success',
-          duration: 2500
-        })
-      }).catch(err => {
-        console.log(err.response.data.message)
-      })
     },
     updateStatus(id, status) {
       updateIsPause(id).then(res => {
