@@ -103,7 +103,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-image:url(../../assets/images/top_images/logo2.jpg);
+    background-image:url(../../assets/images/top_images/login.jpg);
     background-size: cover;
   }
   .title {
