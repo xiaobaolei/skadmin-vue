@@ -109,7 +109,7 @@ export default {
   .title {
     margin: 0px auto 30px auto;
     text-align: center;
-    color: #D012FF;
+    color: #912149;
   }
 
   .login-form {
