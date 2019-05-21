@@ -101,10 +101,9 @@ export default {
   .login {
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    padding: 30px 50px 25px 900px;
+    align-items: center;
     height: 100%;
-    background-image:url(../../assets/images/top_images/login.png);
+    background-image:url(../../assets/images/top_images/logo2.jpg);
     background-size: cover;
   }
   .title {
