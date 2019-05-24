@@ -1,6 +1,6 @@
-# eladmin-qt
+# skadmin-vue
 
-eladmin 前端源码
+sk-admin 前端源码
 
 #### 项目源码
 
